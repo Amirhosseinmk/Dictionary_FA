@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فرهنگ لغت پارسی</title>
+    <style>
+        body { font-family: 'Tahoma', sans-serif; background: #f8f9fa; margin: 0; padding: 20px; text-align: center; }
+        .container { max-width: 800px; margin: 0 auto; }
+        input[type="text"] { width: 70%; padding: 15px; font-size: 20px; border: 2px solid #ccc; border-radius: 8px; }
+        button { padding: 15px 30px; font-size: 20px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; margin-top: 10px; }
+        button:hover { background: #0056b3; }
+        .result { margin-top: 40px; background: white; padding: 25px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); text-align: right; }
+        .def { margin: 15px 0; padding: 10px; border-right: 4px solid #007bff; background: #f0f8ff; }
+        .error { color: red; font-size: 18px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>فرهنگ لغت پارسی به پارسی</h1>
+        
+        <form method="post">
+            {% csrf_token %}
+            <input type="text" name="query" placeholder="کلمه را وارد کنید..." value="{{ query }}" autofocus>
+            <button type="submit">جستجو</button>
+        </form>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        {% if result %}
+            <div class="result">
+                <h2>{{ result.word }}</h2>
+                {% for def in result.definitions %}
+                    <div class="def">
+                        <strong>معنی {{ forloop.counter }}:</strong> {{ def.text }}
+                    </div>
+                {% empty %}
+                    <p>هیچ تعریفی ثبت نشده است.</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
