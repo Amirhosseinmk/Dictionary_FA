@@ -29,17 +29,20 @@
             <p class="error">{{ error }}</p>
         {% endif %}
 
-        {% if result %}
-            <div class="result">
-                <h2>{{ result.word }}</h2>
-                {% for def in result.definitions %}
-                    <div class="def">
-                        <strong>معنی {{ forloop.counter }}:</strong> {{ def.text }}
-                    </div>
-                {% empty %}
-                    <p>هیچ تعریفی ثبت نشده است.</p>
-                {% endfor %}
-            </div>
+        {% if results %}
+            <p>{{ results|length }} نتیجه یافت شد.</p>
+            {% for word in results %}
+                <div class="result">
+                    <h2>{{ word.text }}</h2>
+                    {% for def in word.definitions.all %}
+                        <div class="def">
+                            <strong>معنی {{ forloop.counter }}:</strong> {{ def.text }}
+                        </div>
+                    {% empty %}
+                        <p>هیچ تعریفی ثبت نشده است.</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
         {% endif %}
     </div>
 </body>

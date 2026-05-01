@@ -2,23 +2,19 @@ from django.shortcuts import render
 from .models import Word
 
 def home(request):
-    result = None
+    results = []
     error = None
+    query = ''
 
     if request.method == 'POST':
         query = request.POST.get('query', '').strip()
         if query:
-            try:
-                word = Word.objects.get(text__iexact=query)  # case-insensitive exact match
-                result = {
-                    'word': word.text,
-                    'definitions': word.definitions.all()  # gets all related definitions
-                }
-            except Word.DoesNotExist:
+            results = Word.objects.filter(text__icontains=query).prefetch_related('definitions').order_by('text')
+            if not results:
                 error = f"کلمه «{query}» یافت نشد."
 
     return render(request, 'dictionary/home.html', {
-        'result': result,
+        'results': results,
         'error': error,
-        'query': request.POST.get('query', '') if request.method == 'POST' else ''
+        'query': query
     })
