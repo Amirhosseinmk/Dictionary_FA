@@ -10,7 +10,7 @@ class DefinitionInline(admin.TabularInline):
 @admin.register(Word)
 class WordAdmin(admin.ModelAdmin):
     list_display = ('text', 'definitions_count', 'created_at')
-    search_fields = ('text',)
+    search_fields = ('text', 'definitions__text')
     inlines = [DefinitionInline]
 
     def definitions_count(self, obj):
